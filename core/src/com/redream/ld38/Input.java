@@ -69,12 +69,12 @@ public class Input implements InputProcessor{
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		if(Input.disabled)return false;
 		
-		x *= Game.screenRatioX;
-		y *= Game.screenRatioY;
+//		x /= Game.screenRatioX;
+//		y /= Game.screenRatioY;
 		boolean success = false;
 		for(InputListener il : listeners){
 			if(!il.touchCollTest() || il.getBounds().contains(x+Camera.cam.position.x, (Math.abs(y-Game.HEIGHT))+Camera.cam.position.y)){
-				Boolean temp = il.touchDown(x, y, pointer);
+				Boolean temp = il.touchDown(x, y, button);
 				if(!success)success = temp;
 			}
 		}
@@ -84,12 +84,12 @@ public class Input implements InputProcessor{
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		if(Input.disabled)return false;
 		
-		x *= Game.screenRatioX;
-		y *= Game.screenRatioY;
+//		x *= Game.screenRatioX;
+//		y *= Game.screenRatioY;
 		boolean success = false;
 		for(InputListener il : listeners){
 			if(!il.touchCollTest() || il.getBounds().contains(x+Camera.cam.position.x, (Math.abs(y-Game.HEIGHT))+Camera.cam.position.y)){
-				Boolean temp = il.touchUp(x, y, pointer);
+				Boolean temp = il.touchUp(x, y, button);
 				if(!success)success = temp;
 			}
 		}
@@ -111,28 +111,31 @@ public class Input implements InputProcessor{
 		return success;
 	}
 
-	public boolean touchMoved(int x, int y) {
-		if(Input.disabled)return false;
-		
-		x *= Game.screenRatioX;
-		y *= Game.screenRatioY;
-		
+	public boolean scrolled(int amount) {
 		boolean success = false;
 		for(InputListener il : listeners){
-			if(!il.touchCollTest() || il.getBounds().contains(x+Camera.cam.position.x, (Math.abs(y-Game.HEIGHT)+Camera.cam.position.y))){
-				Boolean temp = il.touchMoved(x, y);
+			if(!il.touchCollTest()){
+				Boolean temp = il.scrolled(amount);
 				if(!success)success = temp;
 			}
 		}
-		return success;
-	}
-
-	public boolean scrolled(int amount) {
 		return false;
 	}
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
+	public boolean mouseMoved(int x, int y) {
+		if(Input.disabled)return false;
+		
+//		x *= Game.screenRatioX;
+//		y *= Game.screenRatioY;
+		
+		boolean success = false;
+		for(InputListener il : listeners){
+			if(!il.touchCollTest() || il.getBounds().contains(x+Camera.cam.position.x, (Math.abs(y-Game.HEIGHT)+Camera.cam.position.y))){
+				Boolean temp = il.mouseMoved(x, y);
+				if(!success)success = temp;
+			}
+		}
+		return success;
 	}
 }

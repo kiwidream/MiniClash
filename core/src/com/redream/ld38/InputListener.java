@@ -20,7 +20,7 @@ public interface InputListener {
         
         public boolean touchDragged(int x, int y,int pointer);
         
-        public boolean touchMoved(int x, int y);
+        public boolean mouseMoved(int x, int y);
         
         public boolean scrolled(int amount);
 }

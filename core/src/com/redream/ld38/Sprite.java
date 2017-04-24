@@ -3,6 +3,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 
 public class Sprite implements InputListener{
@@ -10,7 +11,7 @@ public class Sprite implements InputListener{
 	public float y;
 	public int z;
 	
-	public int tex;
+	
 	
 	public int width;
 	public int height;
@@ -31,6 +32,9 @@ public class Sprite implements InputListener{
 	public float origX;
 	public float origY;
 	public float rot;
+	
+	public int tex;
+	public boolean disableOrig;
 	
 	public AtlasRegion flipX(AtlasRegion ar,boolean x) {
 		
@@ -112,26 +116,45 @@ public class Sprite implements InputListener{
 		return false;
 	}
 
-	public boolean touchMoved(int x, int y) {
-		return false;
-	}
-
 	public boolean scrolled(int amount) {
 		return false;
 	}
+	
+	public float origX(){
+		return this.width*this.xScale/6;
+	}
+	
+	public float origY(){
+		return this.height*this.yScale/6;
+	}
 
+	public Vector2 getCenter(){
+		return new Vector2(this.x, this.y);
+	}
+	
 	public void render(SpriteBatch batch) {
-		float dx = x-origX;// - Game.WIDTH / 2;
-		float dy = y-origY;// - Game.HEIGHT / 2;
-
+		origY = origY();
+		origX = origX();
+		if(disableOrig){
+			origX = origY = 0;
+		}
+		float dx = x-origX;
+		float dy = y-origY;
 		AtlasRegion ar = getTexture();
 		if(width == 0 && height == 0){
 			width = ar.getRegionWidth();
 			height = ar.getRegionHeight();
 		}
-		color = Color.WHITE;
+		//color = Color.WHITE;
 		batch.setColor(color);
+
 		batch.draw(ar, dx, dy, origX, origY, width, height, xScale, yScale, rot);
+	}
+
+	@Override
+	public boolean mouseMoved(int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }
